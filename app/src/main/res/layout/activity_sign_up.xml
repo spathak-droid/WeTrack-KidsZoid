@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Dash"
+    android:background="@drawable/glow">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="140dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="20dp"
+        android:fontFamily="cursive"
+        android:textStyle="bold"
+        android:text="Welcome to KidsZoid"
+        android:textColor="#FF9800"
+        android:textSize="25sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="160dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:boxStrokeColor="#FA7078"
+        app:hintTextColor="#FA7078"
+        app:startIconDrawable="@drawable/name"
+        android:id="@+id/logname"
+
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Full Name"
+            android:textColorHint="#FA7078"
+            android:inputType="textEmailAddress"
+            android:textColor="#9AD19C"
+
+
+
+            />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="220dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:boxStrokeColor="#FA7078"
+        app:hintTextColor="#FA7078"
+        app:startIconDrawable="@drawable/mail"
+        android:id="@+id/logemail"
+
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email Address"
+            android:textColorHint="#FA7078"
+            android:textColor="#9AD19C"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="280dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:boxStrokeColor="#FA7078"
+        app:hintTextColor="#FA7078"
+        app:startIconDrawable="@drawable/phone"
+        android:id="@+id/phone"
+
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number"
+            android:maxLength="10"
+            android:inputType="number"
+            android:textColorHint="#FA7078"
+            android:textColor="#9AD19C"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="340dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:boxStrokeColor="#FA7078"
+        app:hintTextColor="#FA7078"
+        app:startIconDrawable="@drawable/ic_baseline_lock_24"
+        android:id="@+id/logpass"
+
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:textColorHint="#FA7078"
+            android:textColor="#9AD19C"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/sign"
+            android:ems="8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_design"
+
+            android:fontFamily="@font/chewy"
+            android:layout_marginTop="420dp"
+            android:layout_marginLeft="130dp"
+            android:text="Sign Up"
+            android:textColor="@color/white"
+            />
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:cardCornerRadius="80dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp"
+        >
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/logo"
+            android:scaleType="centerCrop"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_baseline_school_24"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="55dp"/>
+    <TextView
+        android:id="@+id/logclick"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Already have an account? Click here"
+        android:textSize="20sp"
+        android:textColor="#ADB840"
+        android:textStyle="bold"
+        android:fontFamily="cursive"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="70dp"/>
+
+
+
+</RelativeLayout>
