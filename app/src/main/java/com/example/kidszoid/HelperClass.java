@@ -1,18 +1,15 @@
 package com.example.kidszoid;
 
 public class HelperClass {
-    String name, email, vehicle, color, id, plate, password;
+    String name, email, phone, password;
 
     public HelperClass() {
     }
 
-    public HelperClass(String name, String email, String vehicle, String color, String id, String plate, String password) {
+    public HelperClass(String name, String email, String phone, String password) {
         this.name = name;
         this.email = email;
-        this.vehicle = vehicle;
-        this.color = color;
-        this.id = id;
-        this.plate = plate;
+        this.phone = phone;
         this.password = password;
     }
 
@@ -32,36 +29,12 @@ public class HelperClass {
         this.email = email;
     }
 
-    public String getVehicle() {
-        return vehicle;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setVehicle(String vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPlate() {
-        return plate;
-    }
-
-    public void setPlate(String plate) {
-        this.plate = plate;
+    public void setPhone(String vehicle) {
+        this.phone = vehicle;
     }
 
     public String getPassword() {
