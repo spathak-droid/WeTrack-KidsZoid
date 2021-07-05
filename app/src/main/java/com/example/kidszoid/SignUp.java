@@ -108,13 +108,15 @@ public class SignUp extends AppCompatActivity {
                 String phoneNo = phone.getEditText().getText().toString();
                 String password = pass.getEditText().getText().toString();
 
+                HelperClass helperClass = new HelperClass(name, emailAdd, phoneNo, password);
+                reference.child(phoneNo).setValue(helperClass);
 
-                Intent intent = new Intent(getApplicationContext(), otp.class);
-                intent.putExtra("phone", phoneNo);
-                startActivity(intent);
 
-                //HelperClass helperClass = new HelperClass(name, emailAdd, phoneNo, password);
-                //reference.child(emailAdd).setValue(helperClass);
+//                Intent intent = new Intent(getApplicationContext(), otp.class);
+//                intent.putExtra("phone", phoneNo);
+//                startActivity(intent);
+
+
 
 //                progressBar.setVisibility(View.VISIBLE);
 //                sign.setVisibility(View.VISIBLE);

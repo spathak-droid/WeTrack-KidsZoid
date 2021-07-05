@@ -33,8 +33,8 @@ public class HelperClass {
         return phone;
     }
 
-    public void setPhone(String vehicle) {
-        this.phone = vehicle;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getPassword() {
