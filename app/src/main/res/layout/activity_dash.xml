@@ -30,7 +30,7 @@
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:startIconDrawable="@drawable/email"
+            app:startIconDrawable="@drawable/phone"
             app:boxStrokeColor="#FA7078"
             app:hintTextColor="#FA7078"
             android:id="@+id/username1"
@@ -40,8 +40,9 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email or Username"
+                android:hint="Phone Number (+1)"
                 android:textColorHint="#FA7078"
+                android:maxLength="10"
                 android:inputType="textEmailAddress"
                 android:textColor="#9AD19C"
 

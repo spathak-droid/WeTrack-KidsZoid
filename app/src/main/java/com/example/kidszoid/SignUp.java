@@ -112,9 +112,9 @@ public class SignUp extends AppCompatActivity {
                 reference.child(phoneNo).setValue(helperClass);
 
 
-                Intent intent = new Intent(getApplicationContext(), otp.class);
-                intent.putExtra("phone", phoneNo);
-                startActivity(intent);
+//                Intent intent = new Intent(getApplicationContext(), otp.class);
+//                intent.putExtra("phone", phoneNo);
+//                startActivity(intent);
 
 
 

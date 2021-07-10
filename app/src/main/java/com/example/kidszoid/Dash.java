@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -94,7 +95,8 @@ public class Dash extends AppCompatActivity {
         String passEntered = password.getEditText().getText().toString().trim();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        Query checkUser = reference.orderByChild("email").equalTo(userEntered);
+        Query checkUser = reference.orderByChild("phone").equalTo(userEntered);
+
         checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -102,21 +104,42 @@ public class Dash extends AppCompatActivity {
 
                     user.setError(null);
                     user.setErrorEnabled(false);
-                    String passwordDB = snapshot.child(userEntered).child("password").getValue(String.class);
 
+
+                    String passwordDB = snapshot.child(userEntered).child("password").getValue(String.class);
                     if(passwordDB.equals(passEntered)){
                         user.setError(null);
                         user.setErrorEnabled(false);
 
-                        String namedDB = snapshot.child(passEntered).child("name").getValue(String.class);
-                        String phoneDB = snapshot.child(passEntered).child("phone").getValue(String.class);
+                        String namedDB = snapshot.child(userEntered).child("name").getValue(String.class);
+                        String phoneDB = snapshot.child(userEntered).child("phone").getValue(String.class);
+                        String emailDB = snapshot.child(userEntered).child("email").getValue(String.class);
 
-                        Intent intent = new Intent(getApplicationContext(), UserScreen.class);
-                        intent.putExtra("email", userEntered);
-                        intent.putExtra("name", namedDB);
-                        intent.putExtra("phone", phoneDB);
+                        String aa = "";
+                        if(emailDB.length() > 4)
+                        {
+                            aa = emailDB.substring(emailDB.length() - 4);
+                        }
+                        if (aa.equals(".edu"))
+                        {
+                            Intent intent = new Intent(getApplicationContext(), SchoolDropDown.class);
+                            intent.putExtra("email", emailDB);
+                            intent.putExtra("name", namedDB);
+                            intent.putExtra("phone", phoneDB);
 
-                        startActivity(intent);
+                            startActivity(intent);
+                        }else{
+                            Intent intent = new Intent(getApplicationContext(), UserScreen.class);
+                            intent.putExtra("email", emailDB);
+                            intent.putExtra("name", namedDB);
+                            intent.putExtra("phone", phoneDB);
+
+                            startActivity(intent);
+                        }
+
+
+
+
                     }else{
                         password.setError("Wrong Password");
                         password.requestFocus();

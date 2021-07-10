@@ -9,8 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kidszoid">
-        <activity android:name=".UserScreen"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"></activity>
+        <activity android:name=".SchoolScreen"></activity>
+        <activity
+            android:name=".SchoolDropDown"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+        <activity
+            android:name=".UserScreen"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".otp"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
