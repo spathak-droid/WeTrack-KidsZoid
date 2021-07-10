@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -53,8 +54,14 @@ public class SchoolDropDown extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),SchoolScreen.class);
                 String school = layout.getEditText().getText().toString().trim();
-                intent.putExtra("school", school);
-                startActivity(intent);
+                if(!school.equals("Please Select Your School")){
+                    intent.putExtra("school", school);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Please Make a Selection",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
