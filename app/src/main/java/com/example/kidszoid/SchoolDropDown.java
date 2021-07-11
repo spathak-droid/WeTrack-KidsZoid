@@ -49,6 +49,11 @@ public class SchoolDropDown extends AppCompatActivity {
 
         autoCompleteTextView.setThreshold(1);
 
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("name");
+        String email = intent.getStringExtra("email");
+        String phone = intent.getStringExtra("phone");
+
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,6 +61,9 @@ public class SchoolDropDown extends AppCompatActivity {
                 String school = layout.getEditText().getText().toString().trim();
                 if(!school.equals("Please Select Your School")){
                     intent.putExtra("school", school);
+                    intent.putExtra("email", email);
+                    intent.putExtra("name", name);
+                    intent.putExtra("phone", phone);
                     startActivity(intent);
                 }
                 else{

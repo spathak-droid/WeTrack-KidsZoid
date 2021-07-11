@@ -60,6 +60,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="330dp"
         android:id="@+id/pass2"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="#FA7078"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_marginLeft="40dp"
