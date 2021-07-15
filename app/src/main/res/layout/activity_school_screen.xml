@@ -6,10 +6,9 @@
     android:id="@+id/drawer_layout"
     android:layout_height="match_parent"
     tools:context=".SchoolScreen"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start"
-    >
 
+
+    >
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -17,8 +16,6 @@
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu"
         android:layout_gravity="start"/>
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,5 +37,19 @@
 
 
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            android:layout_marginTop="50dp"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    </RelativeLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

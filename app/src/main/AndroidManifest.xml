@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kidszoid">
 
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC-O2tm525M1rwn3wNnD5oTgJnuLXDVmoo"/>
 
         <activity android:name=".SchoolScreen"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"></activity>
