@@ -11,10 +11,11 @@
 
     </group>
 
-    <group android:checkableBehavior="single">
+
         <item
             android:title = "Profile">
             <menu>
+                <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_profile"
                     android:title="Profile View"
@@ -23,10 +24,11 @@
                     android:id="@+id/nav_logout"
                     android:title="Log Out"
                     android:icon="@drawable/logout"/>
+                </group>
 
             </menu>
         </item>
-    </group>
+
 
     <item android:title="Communicate">
         <menu>

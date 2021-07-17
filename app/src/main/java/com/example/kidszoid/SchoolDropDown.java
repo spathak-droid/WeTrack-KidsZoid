@@ -2,7 +2,9 @@ package com.example.kidszoid;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,6 +23,12 @@ public class SchoolDropDown extends AppCompatActivity {
     AutoCompleteTextView autoCompleteTextView;
     ArrayList<String> arrayList;
     ArrayAdapter<String> arrayAdapter;
+    SharedPreferences sharedPreferences;
+
+    public  static final String fileName = "login";
+    public  static final String Username = "username";
+
+
 
     Button ok;
     @Override
@@ -28,6 +36,8 @@ public class SchoolDropDown extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_drop_down);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        sharedPreferences = getSharedPreferences(fileName, Context.MODE_PRIVATE);
 
         ok = findViewById(R.id.button_ok);
         layout =(TextInputLayout)findViewById(R.id.layout);

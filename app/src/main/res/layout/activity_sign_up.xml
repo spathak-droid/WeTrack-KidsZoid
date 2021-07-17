@@ -31,7 +31,7 @@
         app:boxCornerRadiusTopStart="20dp"
         app:boxStrokeColor="#FA7078"
         app:hintTextColor="#FA7078"
-        app:startIconDrawable="@drawable/name"
+        app:startIconDrawable="@drawable/name1"
         android:id="@+id/logname"
 
         >
@@ -89,7 +89,7 @@
         app:boxCornerRadiusTopStart="20dp"
         app:boxStrokeColor="#FA7078"
         app:hintTextColor="#FA7078"
-        app:startIconDrawable="@drawable/phone"
+        app:startIconDrawable="@drawable/phone1"
         android:id="@+id/phone"
 
         >

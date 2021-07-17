@@ -30,7 +30,7 @@
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:startIconDrawable="@drawable/phone"
+            app:startIconDrawable="@drawable/phone1"
             app:boxStrokeColor="#FA7078"
             app:hintTextColor="#FA7078"
             android:id="@+id/username1"
@@ -122,13 +122,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="80dp"
         >
+
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:background="@drawable/logo"
-            android:scaleType="centerCrop"
-            />
-</androidx.cardview.widget.CardView>
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"

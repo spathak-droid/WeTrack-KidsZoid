@@ -9,6 +9,8 @@
 
 
     >
+
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -16,10 +18,23 @@
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu"
         android:layout_gravity="start"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+
+
+
+
+
+
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -33,23 +48,39 @@
                 android:theme="?attr/actionBarTheme"
                 app:navigationIcon="@drawable/menu"
                 tools:ignore="MissingConstraints" />
+
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/gifImageView"
+                android:layout_width="80dp"
+                android:layout_height="55dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="-15dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/sadd"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </ScrollView>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal">
-
         <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/map"
             android:layout_marginTop="50dp"
             android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        <ImageView
+            android:id="@+id/logoff"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/logout2"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="350dp"/>
 
-    </RelativeLayout>
+</RelativeLayout>
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

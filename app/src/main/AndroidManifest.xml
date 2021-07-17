@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kidszoid">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,13 +16,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kidszoid">
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"></activity>
+        <activity android:name=".SchoolProfile"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"></activity>
+        <activity android:name=".pop_up" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC-O2tm525M1rwn3wNnD5oTgJnuLXDVmoo"/>
+            android:value="AIzaSyC-O2tm525M1rwn3wNnD5oTgJnuLXDVmoo" />
 
-        <activity android:name=".SchoolScreen"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"></activity>
+        <activity
+            android:name=".SchoolScreen"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".SchoolDropDown"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />

@@ -3,7 +3,9 @@ package com.example.kidszoid;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -25,6 +27,11 @@ public class Dash extends AppCompatActivity {
     TextInputLayout user, password;
     Button login;
 
+    SharedPreferences sharedPreferences;
+    public static final String fileName = "login";
+    public static final String Username = "username";
+    public static final String Passwoord = "password";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +41,15 @@ public class Dash extends AppCompatActivity {
         login = findViewById(R.id.button);
         password = findViewById(R.id.pass2);
         user = (findViewById(R.id.username1));
+
+        //shared preferences code
+//        sharedPreferences = getSharedPreferences(fileName, Context.MODE_PRIVATE);
+//        if(sharedPreferences.contains(Username)){
+//            Intent i = new Intent(Dash.this, SchoolScreen.class);
+//            startActivity(i);
+//        }
+
+
 //        user.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -122,6 +138,10 @@ public class Dash extends AppCompatActivity {
                         }
                         if (aa.equals(".edu"))
                         {
+//                            SharedPreferences.Editor editor = sharedPreferences.edit();
+//                            editor.putString(Username,userEntered);
+//                            editor.putString(Passwoord,passEntered);
+//                            editor.commit();
                             Intent intent = new Intent(getApplicationContext(), SchoolDropDown.class);
                             intent.putExtra("email", emailDB);
                             intent.putExtra("name", namedDB);
@@ -129,6 +149,10 @@ public class Dash extends AppCompatActivity {
 
                             startActivity(intent);
                         }else{
+//                            SharedPreferences.Editor editor = sharedPreferences.edit();
+//                            editor.putString(Username,userEntered);
+//                            editor.putString(Passwoord,passEntered);
+//                            editor.commit();
                             Intent intent = new Intent(getApplicationContext(), UserScreen.class);
                             intent.putExtra("email", emailDB);
                             intent.putExtra("name", namedDB);
