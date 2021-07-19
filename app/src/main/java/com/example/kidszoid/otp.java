@@ -55,7 +55,7 @@ public class otp extends AppCompatActivity {
 
         String Phone = getIntent().getStringExtra("phone");
 
-        sendVerification(Phone);
+       // sendVerification(Phone);
         setupOTPInputs();
 
 
@@ -86,10 +86,10 @@ public class otp extends AppCompatActivity {
         });
     }
 
-    private void sendVerification(String phone) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+1" + phone, 15, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallbacks);
-    }
+//    private void sendVerification(String phone) {
+//        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+//                "+1" + phone, 15, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallbacks);
+//    }
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
