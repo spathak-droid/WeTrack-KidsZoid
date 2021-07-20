@@ -47,7 +47,7 @@ public class UserScreen extends AppCompatActivity {
     Uri imageUri;
     StorageReference storageReference;
     Button go_to_profile;
-    private String name1, email, phone, school;
+    private String name1, email, phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class UserScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserScreen.this, userprofile.class);
-                intent.putExtra("school", school);
+
                 intent.putExtra("email", email);
                 intent.putExtra("name", name1);
                 intent.putExtra("phone", phone);
