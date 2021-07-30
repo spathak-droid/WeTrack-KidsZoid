@@ -23,12 +23,12 @@
 
                 <item
                     android:id="@+id/nav_kid"
-                    android:title="Add Student"
+                    android:title="Add Student/Add Vehicle"
                     android:icon="@drawable/kid"/>
-                <item
-                    android:id="@+id/nav_vehicle"
-                    android:title="Add Vehicle"
-                    android:icon="@drawable/vehicle"/>
+<!--                <item-->
+<!--                    android:id="@+id/nav_vehicle"-->
+<!--                    android:title="Add Vehicle"-->
+<!--                    android:icon="@drawable/vehicle"/>-->
                 <item
                     android:id="@+id/nav_logout"
                     android:title="Log Out"

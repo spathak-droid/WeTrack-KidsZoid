@@ -1,18 +1,15 @@
 package com.example.kidszoid;
 
 public class HelperClass {
-    String name, email, phone, password, kidname, grade;
+    String name, email, phone, password;
 
-    public HelperClass() {
-    }
 
-    public HelperClass(String name, String email, String phone, String password, String kidname, String grade) {
+    public HelperClass(String name, String email, String phone, String password) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.password = password;
-        this.kidname =kidname;
-        this.grade = grade;
+
     }
 
     public String getName() {
@@ -47,11 +44,5 @@ public class HelperClass {
         this.password = password;
     }
 
-    public String getKidname(String kidname) {
-        return kidname;
-    }
 
-    public void setgrade(String grade) {
-        this.grade = grade;
-    }
 }

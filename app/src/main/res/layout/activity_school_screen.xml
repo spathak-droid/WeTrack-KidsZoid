@@ -46,6 +46,7 @@
                 android:background="#00BA3F3F"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="?attr/actionBarTheme"
+                app:layout_constraintStart_toStartOf="parent"
                 app:navigationIcon="@drawable/menu"
                 tools:ignore="MissingConstraints" />
 

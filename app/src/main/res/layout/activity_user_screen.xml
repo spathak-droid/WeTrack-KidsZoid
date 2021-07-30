@@ -4,15 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/color">
+    android:background="@drawable/color"
+    android:id="@+id/drawer_layout1"
+    tools:context=".UserScreen"
+    android:fitsSystemWindows="true"
+    >
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+
         app:headerLayout="@layout/userheader"
-        app:menu="@menu/menu" />
+        app:menu="@menu/menu"
+        android:layout_gravity="start"/>
 
 
     <RelativeLayout
@@ -24,8 +29,9 @@
             android:id="@+id/image"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="125dp"
             android:src="@drawable/prof_pic"
             app:civ_border_color="?attr/colorPrimary"
             app:civ_border_width="2dp" />
@@ -35,8 +41,9 @@
             android:layout_width="143dp"
             android:layout_height="35dp"
             android:layout_below="@+id/image"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="45dp"
+            android:layout_marginEnd="137dp"
             android:fontFamily="@font/aclonica"
             android:gravity="center"
             android:text="Full Name"
@@ -63,7 +70,6 @@
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="709dp"
                 android:layout_weight="1"
-                android:background="@drawable/common_google_signin_btn_text_dark_normal_background"
                 android:fontFamily="sans-serif-thin"
 
                 android:gravity="center"
@@ -107,7 +113,7 @@
                 android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar_action"
+                    android:id="@+id/toolbar_action1"
                     android:layout_width="393dp"
                     android:layout_height="54dp"
                     android:background="#00BA3F3F"

@@ -26,6 +26,9 @@
             android:name=".userprofile"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
+            android:name=".kids"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+        <activity
             android:name=".SchoolDropDown"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
