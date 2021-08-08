@@ -16,20 +16,9 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <ScrollView
-            android:layout_width="393dp"
-            android:layout_height="45dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-        </ScrollView>
-
         <androidx.cardview.widget.CardView
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
             app:cardCornerRadius="80dp">
 

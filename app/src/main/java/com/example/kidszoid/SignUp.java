@@ -30,9 +30,6 @@ public class SignUp extends AppCompatActivity {
     TextInputLayout FN, email, phone, pass;
     Button sign;
 
-    FirebaseDatabase root;
-    DatabaseReference reference;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,8 +97,8 @@ public class SignUp extends AppCompatActivity {
                     else{ pass.setError(null);}
 
 
-                root = FirebaseDatabase.getInstance();
-                reference = root.getReference().child("Users");
+//                root = FirebaseDatabase.getInstance();
+//                reference = root.getReference().child("Users");
 
                 String name = FN.getEditText().getText().toString();
                 String emailAdd = email.getEditText().getText().toString();
@@ -109,13 +106,54 @@ public class SignUp extends AppCompatActivity {
                 String password = pass.getEditText().getText().toString();
 
 
-                HelperClass helperClass = new HelperClass(name, emailAdd, phoneNo, password);
-                reference.child(phoneNo).setValue(helperClass);
+                Intent intent = new Intent(getApplicationContext(), otp.class);
+                intent.putExtra("phone", phoneNo);
+                intent.putExtra("name", name);
+                intent.putExtra("email", emailAdd);
+                intent.putExtra("password", password);
+                //intent.putExtra("backendOTP", s);
+                //intent.putExtra("phone", phoneNo);
+                startActivity(intent);
 
+//                PhoneAuthProvider.getInstance().verifyPhoneNumber(
+//                        "+1" + phoneNo, 60, TimeUnit.SECONDS, SignUp.this,
+//                        new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+//                            @Override
+//                            public void onVerificationCompleted(@NonNull  PhoneAuthCredential phoneAuthCredential) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onVerificationFailed(@NonNull  FirebaseException e) {
+//                                Toast.makeText(SignUp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//                            }
+//
+//                            @Override
+//                            public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+////                                Intent intent = new Intent(getApplicationContext(), otp.class);
+////                                intent.putExtra("phone", phoneNo);
+////                                intent.putExtra("name", name);
+////                                intent.putExtra("email", emailAdd);
+////                                intent.putExtra("backendOTP", s);
+////                                //intent.putExtra("phone", phoneNo);
+////                                startActivity(intent);
+//                            }
+//                        }
+//                );
 
 //                Intent intent = new Intent(getApplicationContext(), otp.class);
 //                intent.putExtra("phone", phoneNo);
+//                intent.putExtra("name", name);
+//                intent.putExtra("email", emailAdd);
+//                //intent.putExtra("phone", phoneNo);
 //                startActivity(intent);
+
+//                HelperClass helperClass = new HelperClass(name, emailAdd, phoneNo, password,null,null);
+//                reference.child(phoneNo).setValue(helperClass);
+
+
+
 
 
 

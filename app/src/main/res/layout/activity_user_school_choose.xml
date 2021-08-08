@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Dash"
+    android:background="@drawable/glow">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="230dp"
+        android:layout_marginEnd="32dp"
+        app:startIconDrawable="@drawable/ic_baseline_school_24"
+        android:layout_marginBottom="563dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:boxStrokeColor="#FA7078"
+        app:hintTextColor="#FA7078">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView1"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:inputType="none"
+            android:background="@null"
+            android:text="Which School does Your Kids Go?" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:orientation="horizontal"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_ok1"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="330dp"
+        android:layout_marginLeft="120dp"
+        android:background="@drawable/button_design"
+        android:fontFamily="@font/chewy"
+        android:text="OK"
+        android:textColor="@color/white"
+        />
+    <androidx.cardview.widget.CardView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:cardCornerRadius="80dp"
+        android:layout_marginLeft="160dp"
+        android:layout_marginTop="80dp"
+        >
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/logo"
+            android:scaleType="centerCrop"
+            />
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_baseline_school_24"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="175dp"/>
+
+
+</RelativeLayout>

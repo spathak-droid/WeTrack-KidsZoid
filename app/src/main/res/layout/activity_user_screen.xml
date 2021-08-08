@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/color"
+    android:background="@drawable/back2"
     android:id="@+id/drawer_layout1"
     tools:context=".UserScreen"
     android:fitsSystemWindows="true"
@@ -23,15 +23,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal">
+        android:gravity="center">
+
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="176dp"
+            android:layout_height="180dp"
+            android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="125dp"
+            android:layout_marginStart="112dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="123dp"
+            android:foregroundGravity="center"
             android:src="@drawable/prof_pic"
             app:civ_border_color="?attr/colorPrimary"
             app:civ_border_width="2dp" />
@@ -41,63 +45,72 @@
             android:layout_width="143dp"
             android:layout_height="35dp"
             android:layout_below="@+id/image"
+            android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="45dp"
+            android:layout_marginStart="131dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="137dp"
-            android:fontFamily="@font/aclonica"
+            android:fontFamily="@font/chewy"
             android:gravity="center"
             android:text="Full Name"
             android:textAllCaps="false"
-            android:textColor="#3F51B5"
+            android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold|italic" />
 
         <LinearLayout
-            android:layout_width="377dp"
-            android:layout_height="81dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="49dp"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_marginTop="320dp"
             android:orientation="horizontal"
-            android:weightSum="2">
+            tools:ignore="ExtraText">
 
-            <Button
-                android:id="@+id/Start_Driving"
-                android:layout_width="341dp"
-                android:layout_height="70dp"
-                android:layout_gravity=""
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="709dp"
-                android:layout_weight="1"
-                android:fontFamily="sans-serif-thin"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/circle"
+                app:civ_border_color="?attr/colorPrimary" />
 
-                android:gravity="center"
-                android:text="Start Driving"
-                android:textStyle="bold" />
+            />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_marginTop="320dp">
+            <ImageView
+                android:id="@+id/start_driving"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="125dp"
+                android:layout_gravity="center"
+                android:src="@drawable/start1" />
+
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="224dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="287dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="250dp"
+            android:drawableStart="@drawable/home"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/profile_view"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
+                android:layout_marginStart="0dp"
                 android:layout_height="wrap_content"
-                android:background="#F44336"
+                android:layout_gravity="center"
+                android:background="@drawable/profile_back_button"
                 android:fontFamily="@font/aclonica"
                 android:text="Go to Profile"
+                android:textColor="#D8D3DF" />
 
-                android:textColor="#D8D3DF"
-                app:icon="@drawable/back_x" />
+
+
 
         </LinearLayout>
 
@@ -110,17 +123,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar_action1"
-                    android:layout_width="393dp"
-                    android:layout_height="54dp"
-                    android:background="#00BA3F3F"
-                    android:minHeight="?attr/actionBarSize"
-                    android:theme="?attr/actionBarTheme"
-                    app:navigationIcon="@drawable/menu"
-                    tools:ignore="MissingConstraints" />
+                android:layout_height="wrap_content">
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -131,10 +134,22 @@
             android:id="@+id/logoff"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="350dp"
+            android:layout_marginStart="350dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/logout2"
             android:backgroundTint="#C5B7B7" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_action1"
+            android:layout_width="393dp"
+            android:layout_height="54dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="4dp"
+            android:background="#00BA3F3F"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:navigationIcon="@drawable/menu"
+            tools:ignore="MissingConstraints" />
 
     </RelativeLayout>
 

@@ -3,6 +3,8 @@ package com.example.kidszoid;
 public class HelperClass {
     String name, email, phone, password;
 
+    public HelperClass() {
+    }
 
     public HelperClass(String name, String email, String phone, String password) {
         this.name = name;

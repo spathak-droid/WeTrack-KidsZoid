@@ -17,7 +17,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
-public class SchoolDropDown extends AppCompatActivity {
+public class userSchoolChoose extends AppCompatActivity {
 
     TextInputLayout layout;
     AutoCompleteTextView autoCompleteTextView;
@@ -34,14 +34,14 @@ public class SchoolDropDown extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_school_drop_down);
+        setContentView(R.layout.activity_user_school_choose);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         sharedPreferences = getSharedPreferences(fileName, Context.MODE_PRIVATE);
 
-        ok = findViewById(R.id.button_ok);
-        layout =(TextInputLayout)findViewById(R.id.layout);
-        autoCompleteTextView = (AutoCompleteTextView)findViewById(R.id.autoCompleteTextView);
+        ok = findViewById(R.id.button_ok1);
+        layout =(TextInputLayout)findViewById(R.id.layout1);
+        autoCompleteTextView = (AutoCompleteTextView)findViewById(R.id.autoCompleteTextView1);
 
         arrayList = new ArrayList<>();
         arrayList.add("Arlington High School");
@@ -66,9 +66,9 @@ public class SchoolDropDown extends AppCompatActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),SchoolScreen.class);
+                Intent intent = new Intent(getApplicationContext(),UserScreen.class);
                 String school = layout.getEditText().getText().toString().trim();
-                if(!school.equals("Please Select Your School")){
+                if(!school.equals("Which School does Your Kids Go?")){
                     intent.putExtra("school", school);
                     intent.putExtra("email", email);
                     intent.putExtra("name", name);

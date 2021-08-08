@@ -153,7 +153,7 @@ public class Dash extends AppCompatActivity {
 //                            editor.putString(Username,userEntered);
 //                            editor.putString(Passwoord,passEntered);
 //                            editor.commit();
-                            Intent intent = new Intent(getApplicationContext(), UserScreen.class);
+                            Intent intent = new Intent(getApplicationContext(), userSchoolChoose.class);
                             intent.putExtra("email", emailDB);
                             intent.putExtra("name", namedDB);
                             intent.putExtra("phone", phoneDB);

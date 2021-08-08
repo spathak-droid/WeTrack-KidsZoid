@@ -43,14 +43,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
 
-public class UserScreen extends FragmentActivity implements  NavigationView.OnNavigationItemSelectedListener {
-    ImageView imageView;
+
+public class UserScreen extends FragmentActivity implements NavigationView.OnNavigationItemSelectedListener {
+    ImageView imageView, start_button;
 
     NavigationView navigationView;
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     ImageView logOff;
-    //TextView name;
+    TextView nameTag;
     Dialog dialog;
     FirebaseStorage storage;
     FirebaseFirestore fStore;
@@ -58,8 +59,10 @@ public class UserScreen extends FragmentActivity implements  NavigationView.OnNa
     FirebaseUser user;
     Uri imageUri;
     StorageReference storageReference;
-    Button go_to_profile,add_kid;
-    private String name, email, phone;
+    Button go_to_profile;
+    String email, phone, school;
+    Button add_kid;
+    String name;
     private long backpressed;
     private Toast backToast;
 
@@ -69,7 +72,10 @@ public class UserScreen extends FragmentActivity implements  NavigationView.OnNa
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_screen);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+
+        start_button = findViewById(R.id.start_driving);
         logOff = findViewById(R.id.logoff);
         logOff.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,12 +87,11 @@ public class UserScreen extends FragmentActivity implements  NavigationView.OnNa
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar_action1);
 
-        // name    =findViewById(R.id.full_name_btn);
+        nameTag    =findViewById(R.id.full_name_btn);
         imageView = findViewById(R.id.image);
         storage = FirebaseStorage.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         go_to_profile = findViewById(R.id.profile_view);
-
         mAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
@@ -100,6 +105,10 @@ public class UserScreen extends FragmentActivity implements  NavigationView.OnNa
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
+        nameTag.setText(name);
+
+
+        school = intent.getStringExtra("school");
         email = intent.getStringExtra("email");
         phone = intent.getStringExtra("phone");
 
@@ -112,6 +121,19 @@ public class UserScreen extends FragmentActivity implements  NavigationView.OnNa
                 intent.putExtra("email", email);
                 intent.putExtra("name", name);
                 intent.putExtra("phone", phone);
+                intent.putExtra("school", school);
+                startActivity(intent);
+            }
+        });
+        start_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserScreen.this, UserMap.class);
+
+                intent.putExtra("email", email);
+                intent.putExtra("name", name);
+                intent.putExtra("phone", phone);
+                intent.putExtra("school", school);
                 startActivity(intent);
             }
         });
@@ -142,38 +164,40 @@ public class UserScreen extends FragmentActivity implements  NavigationView.OnNa
             }
         });
     }
-        @Override
-        public void onBackPressed() {
-            if(backpressed + 2000 > System.currentTimeMillis()){
-                backToast.cancel();
-                super.onBackPressed();
-                return;
-            }else if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-                drawerLayout.closeDrawer(GravityCompat.START);
+
+    @Override
+    public void onBackPressed() {
+        if (backpressed + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+        } else if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backpressed = System.currentTimeMillis();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri imageUri = data.getData();
+
+                //imageView.setImageURI(imageUri);
+
+                uploadImageToFirebase(imageUri);
+
+
             }
-            else{
-                backToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT);
-                backToast.show();
-            }
-            backpressed = System.currentTimeMillis();
 
         }
-        @Override
-        protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == 1000) {
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri imageUri = data.getData();
+    }
 
-                    //imageView.setImageURI(imageUri);
-
-                    uploadImageToFirebase(imageUri);
-
-
-                }
-
-            }
-        }
     private void uploadImageToFirebase(Uri imageUri) {
 
         final StorageReference fileRef = storageReference.child("profile.jpg");
@@ -197,8 +221,7 @@ public class UserScreen extends FragmentActivity implements  NavigationView.OnNa
     }
 
 
-
-    public void logout( View view){
+    public void logout(View view) {
         dialog = new Dialog(UserScreen.this);
         dialog.setContentView(R.layout.pop_up);
 
@@ -210,19 +233,24 @@ public class UserScreen extends FragmentActivity implements  NavigationView.OnNa
         Button no = dialog.findViewById(R.id.btn_no);
         no.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {dialog.dismiss(); }});
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAuth.signOut();
                 Intent intent = new Intent(getApplicationContext(), Dash.class);
                 startActivity(intent);
-            }});
-        dialog.show(); }
+            }
+        });
+        dialog.show();
+    }
 
 
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_home:
                 drawerLayout.closeDrawer(GravityCompat.START);
                 break;
@@ -238,14 +266,18 @@ public class UserScreen extends FragmentActivity implements  NavigationView.OnNa
                 Button no = dialog.findViewById(R.id.btn_no);
                 no.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {dialog.dismiss(); }});
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
                 yes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         mAuth.signOut();
                         Intent intent = new Intent(getApplicationContext(), Dash.class);
                         startActivity(intent);
-                    }});
+                    }
+                });
                 dialog.show();
                 break;
             case R.id.nav_profile:
@@ -261,6 +293,7 @@ public class UserScreen extends FragmentActivity implements  NavigationView.OnNa
                 Intent intent1 = new Intent(UserScreen.this, kids.class);
                 intent1.putExtra("name", name);
                 startActivity(intent1);
+                break;
 
         }
         return true;

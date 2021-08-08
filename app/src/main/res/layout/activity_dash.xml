@@ -43,7 +43,7 @@
                 android:hint="Phone Number (+1)"
                 android:textColorHint="#FA7078"
                 android:maxLength="10"
-                android:inputType="textEmailAddress"
+                android:inputType="phone"
                 android:textColor="#9AD19C"
 
 
