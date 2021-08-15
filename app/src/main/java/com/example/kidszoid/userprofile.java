@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -48,10 +49,19 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import java.util.HashMap;
 import java.util.UUID;
 public class userprofile extends AppCompatActivity {
-    TextView name, phone, email, school, first_name;
-    private DatabaseReference databaseReference;
+    TextView name, phone, email, change, first_name,license, model;
+    private DatabaseReference databaseReference,vehicleref;
     private FirebaseAuth mAuth;
-
+    ImageView image;
+    Button back;
+    Uri imageUri;
+    FirebaseStorage storage;
+    FirebaseFirestore fStore;
+    StorageReference profileRef;
+    StorageReference storageReference;
+    private String name1, email1, phone1,license1, model1;
+    private long backpressed;
+    private Toast backToast;
 
 
     @Override
@@ -69,33 +79,120 @@ public class userprofile extends AppCompatActivity {
         name = findViewById(R.id.fullname);
         phone = findViewById(R.id.phone_no);
         email = findViewById(R.id.email_user);
+        image = findViewById(R.id.profile);
+        change = findViewById(R.id.change_profile);
 
         first_name = findViewById(R.id.first_name);
 
         Intent intent = getIntent();
-        String name1 = intent.getStringExtra("name");
-        String email1 = intent.getStringExtra("email");
-        String phone1 = intent.getStringExtra("phone");
-
+        name1 = intent.getStringExtra("name");
+        email1 = intent.getStringExtra("email");
+        phone1 = intent.getStringExtra("phone");
+        //license1 = intent.getStringExtra("License Plate number");
+        model1 = intent.getStringExtra("Make");
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         name.setText(name1);
         email.setText(email1);
-        phone.setText("(+1)-"+phone1);
+        phone.setText("(+1)-" + phone1);
         first_name.setText(name1);
 
+        vehicleref = FirebaseDatabase.getInstance().getReference().child("Kids").child(name1).child("Vehicles");
+        vehicleref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot a : snapshot.getChildren()) {
+
+                    license1 =a.child("License Plate number").getValue().toString();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull  DatabaseError error) {
+
+            }
+        });
+
+//        license.setText(license1);
+//        model.setText(model1);
+        profileRef = storageReference.child("users/" + phone1);
 
 
-//        Intent intent = getIntent();
-//        String name1 = intent.getStringExtra("name");
-//        String email1 = intent.getStringExtra("email");
-//        String phone1 = intent.getStringExtra("phone");
 
 
-//        name.setText(name1);
-//        email.setText(email1);
-//        phone.setText("(+1)-" + phone1);
-//
-//        first_name.setText(name1);
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(image);
+            }
+        });
+
+
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGallery, 1000);
+            }
+        });
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000) {
+            if (resultCode == Activity.RESULT_OK) {
+                imageUri = data.getData();
 
-}
+
+                uploadImageToFirebase(imageUri);
+
+
+            }
+
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        if(backpressed + 2000 > System.currentTimeMillis()){
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+
+        }
+        else{
+            backToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backpressed = System.currentTimeMillis();
+
+    }
+    private void uploadImageToFirebase(Uri imageUri) {
+
+
+
+        assert mAuth != null;
+        StorageReference fileRef= storageReference.child("users/" + phone1);
+
+        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(image);
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Failed.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+
+
+    }}

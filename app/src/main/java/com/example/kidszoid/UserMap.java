@@ -340,11 +340,11 @@ public class UserMap extends FragmentActivity implements OnMapReadyCallback, Nav
     @Override
     protected void onStop() {
         super.onStop();
-//        stopLocationUpdates();
-//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("parentAvailable");
-//
-//        GeoFire geoFire = new GeoFire(ref);
-//        geoFire.removeLocation(userID);
+        stopLocationUpdates();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("parentAvailable").child(school_match);
+
+        GeoFire geoFire = new GeoFire(ref);
+        geoFire.removeLocation(userID);
     }
 
     private void enableUserLocation() {

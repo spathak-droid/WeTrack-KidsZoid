@@ -1,6 +1,8 @@
 package com.example.kidszoid;
 
 import androidx.annotation.NonNull;
+
+import android.net.Uri;
 import android.os.Handler;
 
 import java.text.DateFormat;
@@ -71,6 +73,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,9 +83,11 @@ import java.util.Date;
 public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener, GoogleMap.OnMarkerClickListener {
 
     DrawerLayout drawerLayout;
-    boolean doublePress;
+    boolean doublePress, parent;
     private FirebaseAuth auth;
     NavigationView navigationView;
+    private StorageReference storageProfile;
+    StorageReference profileRef;
 
     GoogleMap mMap;
     MarkerOptions place1, place2, schoolPlace;
@@ -92,6 +99,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
     Dialog dialog;
     private long backpressed;
     private Toast backToast;
+    MarkerOptions schoolLng;
 
     private String name, email, phone, school, userID;
     Marker userLocationMarker;
@@ -101,6 +109,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationRequest locationRequest;
+    Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +118,8 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         auth = FirebaseAuth.getInstance();
         kidd = new ArrayList<String>();
+        parent = false;
+
 
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -126,6 +137,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
         email = intent.getStringExtra("email");
         phone = intent.getStringExtra("phone");
         school = intent.getStringExtra("school");
+        storageProfile = FirebaseStorage.getInstance().getReference();
         userID = school;
 
         navigationView.bringToFront();
@@ -199,25 +211,25 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
         }}
 
-    private void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-    }
-
-    private void stopLocationUpdates() {
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            startLocationUpdates();
-        } else {
-            // you need to request permissions...
-        }
-    }
+//    private void startLocationUpdates() {
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
+//        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+//    }
+//
+//    private void stopLocationUpdates() {
+//        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+//    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//            startLocationUpdates();
+//        } else {
+//            // you need to request permissions...
+//        }
+//    }
 
 
 
@@ -273,6 +285,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
 
     private void getParentLocation() {
 
+
         school = getIntent().getStringExtra("school");
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference schoolref = databaseReference.child("parentAvailable").child(school);
@@ -281,14 +294,20 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
         schoolref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mMap.clear();
+                mMap.addMarker(schoolLng);
                 for (DataSnapshot a : snapshot.getChildren()) {
                     String ParentName = a.getKey();
-
-
+                    //mMap.clear();
                     LatLng latLng = new LatLng(a.child("l").child("0").getValue(Double.class),
                             a.child("l").child("1").getValue(Double.class));
-                    schoolPlace = new MarkerOptions().position(latLng).title(ParentName).icon(bitmapDescriptor(getApplicationContext(), R.drawable.car_marker));
-                    Marker marker = mMap.addMarker(schoolPlace);
+                    Location loc = new Location("");
+                    loc.setLatitude(latLng.latitude);
+                    loc.setLongitude(latLng.longitude);
+                    schoolPlace = new MarkerOptions().position(latLng).title(ParentName).icon(bitmapDescriptor(getApplicationContext(), R.drawable.cart));
+                    schoolPlace.rotation(loc.getBearing());
+                    schoolPlace.anchor((float) 0.5, (float) 0.5);
+                    marker = mMap.addMarker(schoolPlace);
                     marker.showInfoWindow();
                 }
 
@@ -304,7 +323,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onStop() {
         super.onStop();
-        stopLocationUpdates();
+        //stopLocationUpdates();
 //        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("schoolAvailable");
 //
 //        GeoFire geoFire = new GeoFire(ref);
@@ -351,6 +370,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
             googleMap.addMarker(options);
             current.setLatitude(latLng.latitude); current.setLongitude(latLng.longitude);
+            schoolLng = options;
         }else if(school.equals("Arlington Collegiate High School")){
             LatLng latLng = new LatLng(32.64252393175996, -97.06792151805416);
             MarkerOptions options = new MarkerOptions().position(latLng).title("Arlington Collegiate High School").
@@ -358,6 +378,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
             googleMap.addMarker(options);
             current.setLatitude(latLng.latitude); current.setLongitude(latLng.longitude);
+            schoolLng = options;
         }else if(school.equals("Lamar High School")){
             LatLng latLng = new LatLng(32.763895398417866, -97.12546380086025);
             MarkerOptions options = new MarkerOptions().position(latLng).title("Lamar High School").
@@ -365,6 +386,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
             googleMap.addMarker(options);
             current.setLatitude(latLng.latitude); current.setLongitude(latLng.longitude);
+            schoolLng = options;
         }else if(school.equals("James Martin High School")){
             LatLng latLng = new LatLng(32.684742600649024, -97.17997192969774);
             MarkerOptions options = new MarkerOptions().position(latLng).title("James Martin High School").
@@ -372,6 +394,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
             googleMap.addMarker(options);
             current.setLatitude(latLng.latitude); current.setLongitude(latLng.longitude);
+            schoolLng = options;
         }else if(school.equals("Premier High School")){
             LatLng latLng = new LatLng(32.77301696770131, -97.10497080001343);
             MarkerOptions options = new MarkerOptions().position(latLng).title("Premier High School").
@@ -379,7 +402,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
             googleMap.addMarker(options);
             current.setLatitude(latLng.latitude); current.setLongitude(latLng.longitude);
-
+            schoolLng = options;
         }else if(school.equals("James Bowie High School")){
             LatLng latLng = new LatLng(32.6636262069267, -97.0745371027115);
             MarkerOptions options = new MarkerOptions().position(latLng).title("James Bowie High School").
@@ -387,6 +410,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
             googleMap.addMarker(options);
             current.setLatitude(latLng.latitude); current.setLongitude(latLng.longitude);
+            schoolLng = options;
 
         }else if(school.equals("Sam Houston High School")){
             LatLng latLng = new LatLng(32.70281152861373, -97.07571061620396);
@@ -395,6 +419,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
             googleMap.addMarker(options);
             current.setLatitude(latLng.latitude); current.setLongitude(latLng.longitude);
+            schoolLng = options;
 
         }else if(school.equals("Juan Seguin High School")){
             LatLng latLng = new LatLng(32.63185637556569, -97.09968984688997);
@@ -403,6 +428,7 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
             googleMap.addMarker(options);
             current.setLatitude(latLng.latitude); current.setLongitude(latLng.longitude);
+            schoolLng = options;
 
         }else{
             LatLng latLng = new LatLng(current.getLatitude(), current.getLongitude());
@@ -411,7 +437,20 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
             googleMap.addMarker(options);
             current.setLatitude(latLng.latitude); current.setLongitude(latLng.longitude);
+            schoolLng = options;
         }
+
+//        if (!parent){
+//            getParentLocation();
+//        }else{
+//            parent = true;
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    getParentLocation();
+//                }
+//            }, 5000);
+        //}
         getParentLocation();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("schoolAvailable");
         GeoFire geoFire = new GeoFire(ref);
@@ -501,117 +540,139 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
                 String marker_name = marker.getTitle();
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Kids");
-                DatabaseReference kidsRef = databaseReference.child(marker_name).child("Kids");
-                DatabaseReference VehicleRef = databaseReference.child(marker_name).child("Vehicles");
-                if(kidsRef != null && VehicleRef!=null){
-                    kidsRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot Kidsnapshot) {
-                            for(DataSnapshot bb :Kidsnapshot.getChildren()){
-                                kidd.add(bb.getKey().toUpperCase());
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Kids");
+                    DatabaseReference kidsRef = databaseReference.child(marker_name).child("Kids");
+                    DatabaseReference VehicleRef = databaseReference.child(marker_name).child("Vehicles");
+                    if (kidsRef != null && VehicleRef != null) {
+                        kidsRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot Kidsnapshot) {
+                                for (DataSnapshot bb : Kidsnapshot.getChildren()) {
+                                    kidd.add(bb.getKey().toUpperCase());
+                                }
+
                             }
 
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {}});
+                        VehicleRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot Kidsnapshot) {
+                                for (DataSnapshot cc : Kidsnapshot.getChildren()) {
+                                    vehicle_name = cc.child("Make").getValue().toString().toUpperCase() + ", " + cc.child("Model").getValue().toString().toUpperCase();
+                                    plate_name = cc.child("License Plate number").getValue().toString().toUpperCase();
+                                }
 
-                    VehicleRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot Kidsnapshot) {
-                            for(DataSnapshot cc :Kidsnapshot.getChildren()){
-                                vehicle_name = cc.child("Make").getValue().toString().toUpperCase() + ", " + cc.child("Model").getValue().toString().toUpperCase();
-                                plate_name = cc.child("License Plate number").getValue().toString().toUpperCase();
                             }
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
+
+
+                        if (doublePress && kidd != null) {
+                            kids_name = " ";
+                            if (kidd != null) {
+                                for (String s : kidd) {
+                                    kids_name += s + " & ";
+                                }
+                            }
+                            kids_name = kids_name.substring(0, (kids_name.length() - 3));
+                            dialog = new Dialog(SchoolScreen.this);
+                            dialog.setContentView(R.layout.checkparent);
+
+                            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.showlisc));
+                            //dialog.getWindow().setLayout(ViewGroup.LayoutParams.M, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            dialog.setCancelable(true);
+
+                            TextView vehicle = dialog.findViewById(R.id.vehicle_pop);
+                            ImageView lisc = dialog.findViewById(R.id.liscense);
+                            TextView plate = dialog.findViewById(R.id.plate_pop);
+                            TextView kid = dialog.findViewById(R.id.kids_pop);
+                            Button button = dialog.findViewById(R.id.btn_cc);
+                            button.setVisibility(View.GONE);
+                            profileRef = storageProfile.child("License/"+marker_name);
+                            profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Picasso.get().load(uri).into(lisc);
+                                }
+                            });
+
+
+                            Date current_time = Calendar.getInstance().getTime();
+                            SimpleDateFormat s = new SimpleDateFormat("hh:mm a");
+                            SimpleDateFormat date_s = new SimpleDateFormat("MM-dd-yyyy");
+                            String time = s.format(current_time);
+                            String date = date_s.format(current_time);
+                            //String format = DateFormat.getDateInstance(DateFormat.FULL).format(current_time);
+
+                            vehicle.setText(vehicle_name);
+                            plate.setText(plate_name);
+                            kid.setText(kids_name);
+
+                            kidd = new ArrayList<>();
+                            kids_name = "";
+                            CheckBox dropoff = dialog.findViewById(R.id.drop_check);
+                            CheckBox pickup = dialog.findViewById(R.id.pick_check);
+                            dropoff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                    pickup.setChecked(false);
+                                    button.setVisibility(View.VISIBLE);
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("parentAvailable").child(school);
+                                    GeoFire geoFire = new GeoFire(ref);
+                                    geoFire.removeLocation(userID);
+                                }
+                            });
+                            pickup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                    dropoff.setChecked(false);
+                                    button.setVisibility(View.VISIBLE);
+                                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference("parentAvailable").child(school);
+                                    GeoFire geoFire = new GeoFire(ref);
+                                    geoFire.removeLocation(userID);
+                                }
+                            });
+                            button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (pickup.isChecked()) {
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("History").child(userID).child(date).child("pickup").child(kid.getText().toString());
+                                        ref.setValue(time);
+                                        dialog.dismiss();
+                                        marker.setVisible(false);
+
+                                    } else if (dropoff.isChecked()) {
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("History").child(userID).child(date).child("dropoff").child(kid.getText().toString());
+                                        ref.setValue(time);
+                                        dialog.dismiss();
+                                        marker.setVisible(false);
+
+                                    }
+                                }
+                            });
+                            dialog.getWindow().setGravity(Gravity.CENTER);
+                            dialog.show();
+
+                        } else {
+                            kidd = new ArrayList<>();
+                            Toast.makeText(SchoolScreen.this, "Please Click Again to View Info", Toast.LENGTH_SHORT).show();
+                            this.doublePress = true;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    doublePress = false;
+                                }
+                            }, 2000);
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {}});
-
-
-                if(doublePress){
-                    kids_name = " ";
-                    if (kidd != null){
-                    for (String s : kidd){
-                        kids_name += s + " & ";}
                     }
-                    kids_name = kids_name.substring(0, (kids_name.length() - 3));
-                    dialog = new Dialog(SchoolScreen.this);
-                    dialog.setContentView(R.layout.checkparent);
 
-                    dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.showlisc));
-                    //dialog.getWindow().setLayout(ViewGroup.LayoutParams.M, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    dialog.setCancelable(true);
-
-                    TextView vehicle = dialog.findViewById(R.id.vehicle_pop);
-                    TextView plate = dialog.findViewById(R.id.plate_pop);
-                    TextView kid = dialog.findViewById(R.id.kids_pop);
-                    Button button = dialog.findViewById(R.id.btn_cc);
-                    button.setVisibility(View.GONE);
-
-                    Date current_time = Calendar.getInstance().getTime();
-                    SimpleDateFormat s = new SimpleDateFormat("hh:mm a");
-                    SimpleDateFormat date_s = new SimpleDateFormat("MM-dd-yyyy");
-                    String time = s.format(current_time);
-                    String date = date_s.format(current_time);
-                    //String format = DateFormat.getDateInstance(DateFormat.FULL).format(current_time);
-
-                    vehicle.setText(vehicle_name);
-                    plate.setText(plate_name);
-                    kid.setText(kids_name);
-
-                    kidd = new ArrayList<>();
-                    kids_name= "";
-                    CheckBox dropoff = dialog.findViewById(R.id.drop_check);
-                    CheckBox pickup = dialog.findViewById(R.id.pick_check);
-                    dropoff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            pickup.setChecked(false);
-                            button.setVisibility(View.VISIBLE);
-                        }
-                    });
-                    pickup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            dropoff.setChecked(false);
-                            button.setVisibility(View.VISIBLE);
-                        }
-                    });
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (pickup.isChecked()){
-                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("History").child(userID).child(date).child("pickup").child(kid.getText().toString());
-                                ref.setValue(time);
-                                dialog.dismiss();
-                                marker.setVisible(false);
-
-                            }else if (dropoff.isChecked()){
-                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("History").child(userID).child(date).child("dropoff").child(kid.getText().toString());
-                                ref.setValue(time);
-                                dialog.dismiss();
-                                marker.setVisible(false);
-
-                            }
-                        }
-                    });
-                    dialog.getWindow().setGravity(Gravity.CENTER);
-                    dialog.show();
-
-                }else{
-                    kidd = new ArrayList<>();
-                    Toast.makeText(SchoolScreen.this, "Please Click Again to View Info", Toast.LENGTH_SHORT).show();
-                    this.doublePress = true;
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            doublePress = false;
-                        }
-                    }, 2000);
-                }}
 
 
                 return false;
@@ -619,3 +680,4 @@ public class SchoolScreen extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+

@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -45,7 +50,10 @@ public class SchoolProfile extends AppCompatActivity {
     private  String myUri = "";
     private StorageTask uploadTask;
     private StorageReference storageProfile;
-
+    StorageReference profileRef;
+    private long backpressed;
+    private Toast backToast;
+    String phone1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +78,7 @@ public class SchoolProfile extends AppCompatActivity {
         Intent intent = getIntent();
         String name1 = intent.getStringExtra("name");
         String email1 = intent.getStringExtra("email");
-        String phone1 = intent.getStringExtra("phone");
+        phone1 = intent.getStringExtra("phone");
         String school1 = intent.getStringExtra("school");
 
         name.setText(name1);
@@ -79,88 +87,80 @@ public class SchoolProfile extends AppCompatActivity {
         school.setText(school1);
         first_name.setText(name1);
 
+        profileRef = storageProfile.child("schoolusers/" + phone1);
+
+
+
+
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(profile);
+            }
+        });
+
+
         frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadProfileImage();
-                CropImage.activity().setAspectRatio(1,1).start(SchoolProfile.this);
-                getUserinfo();
-            }
-        });
-
-    }
-
-    private void getUserinfo(){
-        databaseReference.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull  DataSnapshot snapshot) {
-                if(snapshot.exists()&& snapshot.getChildrenCount()>0){
-                    if(snapshot.hasChild("image"))
-                    {
-                        String image = snapshot.child("image").getValue().toString();
-                        Picasso.get().load(image).into(profile);
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+                Intent openGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGallery, 1000);
             }
         });
     }
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable  Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000) {
+            if (resultCode == Activity.RESULT_OK) {
+                imageUri = data.getData();
 
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK && data != null){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            imageUri = result.getUri();
 
-            profile.setImageURI(imageUri);
-        }else{
-            Toast.makeText(this, "ERROR, TRY AGAIN!!", Toast.LENGTH_SHORT).show();
+                uploadImageToFirebase(imageUri);
+
+
+            }
+
         }
     }
+    @Override
+    public void onBackPressed() {
+        if(backpressed + 2000 > System.currentTimeMillis()){
+            backToast.cancel();
+            super.onBackPressed();
+            return;
 
-    private void uploadProfileImage(){
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Set Your profile");
-        progressDialog.setMessage("Please wait, while we are setting your data");
-        progressDialog.show();
-
-        if(imageUri != null){
-            final StorageReference fileRef = storageProfile.child(mAuth.getCurrentUser().getUid()+".jpg");
-            uploadTask = fileRef.putFile(imageUri);
-            uploadTask.continueWithTask(new Continuation() {
-                @Override
-                public Object then(@NonNull Task task) throws Exception {
-                    if (!task.isSuccessful()){
-                        throw task.getException();
-                    }
-                    return fileRef.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()){
-                        Uri downloadUrl = task.getResult();
-                        myUri = downloadUrl.toString();
-
-                        HashMap<String, Object> userMap = new HashMap<>();
-                        userMap.put("image",myUri);
-                        databaseReference.child(mAuth.getCurrentUser().getUid()).updateChildren(userMap);
-
-                        progressDialog.dismiss();
-                    }
-
-                }
-            });
-        }else{
-            progressDialog.dismiss();
-            Toast.makeText(this, "Please Select An Image", Toast.LENGTH_SHORT).show();
         }
+        else{
+            backToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backpressed = System.currentTimeMillis();
+
+    }
+    private void uploadImageToFirebase(Uri imageUri) {
+
+
+
+        assert mAuth != null;
+        StorageReference fileRef= storageProfile.child("schoolusers/" + phone1);
+
+        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(profile);
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Failed.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

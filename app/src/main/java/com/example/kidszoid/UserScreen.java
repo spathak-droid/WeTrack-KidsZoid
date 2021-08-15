@@ -61,7 +61,7 @@ public class UserScreen extends FragmentActivity implements NavigationView.OnNav
     StorageReference storageReference;
     Button go_to_profile;
     String email, phone, school;
-    Button add_kid;
+
     String name;
     private long backpressed;
     private Toast backToast;
@@ -137,17 +137,10 @@ public class UserScreen extends FragmentActivity implements NavigationView.OnNav
                 startActivity(intent);
             }
         });
-//        add_kid.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(UserScreen.this, kids.class);
-//                intent.putExtra("name", name);
-//                startActivity(intent);
-//            }
-//        });
 
 
-        StorageReference profileRef = storageReference.child("profile.jpg");
+
+        StorageReference profileRef = storageReference.child("users/"+phone);
 
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -168,7 +161,7 @@ public class UserScreen extends FragmentActivity implements NavigationView.OnNav
     @Override
     public void onBackPressed() {
         if (backpressed + 2000 > System.currentTimeMillis()) {
-            backToast.cancel();
+            //backToast.cancel();
             super.onBackPressed();
             return;
         } else if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -200,7 +193,7 @@ public class UserScreen extends FragmentActivity implements NavigationView.OnNav
 
     private void uploadImageToFirebase(Uri imageUri) {
 
-        final StorageReference fileRef = storageReference.child("profile.jpg");
+        final StorageReference fileRef = storageReference.child("users/"+phone);
         fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -293,6 +286,13 @@ public class UserScreen extends FragmentActivity implements NavigationView.OnNav
                 Intent intent1 = new Intent(UserScreen.this, kids.class);
                 intent1.putExtra("name", name);
                 startActivity(intent1);
+                break;
+
+            case R.id.nav_license:
+                Intent intent12 = new Intent(UserScreen.this, license.class);
+                intent12.putExtra("name", name);
+                intent12.putExtra("phone", phone);
+                startActivity(intent12);
                 break;
 
         }
